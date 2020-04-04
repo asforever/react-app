@@ -1,23 +1,19 @@
-const path = require('path');
 const webpack = require('webpack');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const {CleanWebpackPlugin} = require('clean-webpack-plugin');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
+const paths = require('./paths');
 
-const contextPath = path.resolve(__dirname, "../src");
-const distPath = path.resolve(__dirname, "../dist");
-const htmlPath = path.resolve(contextPath, "index.html");
-const ico = path.resolve(contextPath, "favicon.ico");
-const PUBLIC_URL = process.env.PUBLIC_URL || '/';
+const {PUBLIC_URL,src,dist,indexHtml,faviconIco} = paths;
 
 module.exports = {
-    context: contextPath,
+    context: src,
     entry: {
         app: './index.js',
     },
     output: {
         filename: '[name].[hash].js',
-        path: distPath,
+        path: dist,
         publicPath: './'
     },
 
@@ -25,7 +21,7 @@ module.exports = {
         rules: [
             {
                 test: /\.(js|mjs|jsx|ts|tsx)$/,
-                include: contextPath,
+                include: src,
                 exclude: /node_modules/,
                 loader: require.resolve('babel-loader'),
                 options: {
@@ -113,9 +109,9 @@ module.exports = {
         new CleanWebpackPlugin(),
         new HtmlWebpackPlugin({
             title: '管理输出',
-            template: htmlPath,
+            template: indexHtml,
             inject: 'body',
-            favicon: ico,
+            favicon: faviconIco,
         }),
         new webpack.DefinePlugin({
             'process.env.PUBLIC_URL': JSON.stringify(PUBLIC_URL)
